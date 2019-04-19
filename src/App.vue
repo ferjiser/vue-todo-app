@@ -1,28 +1,58 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Things Todo</h1>
+    <TodoList 
+    :list = "list"
+    @add-task-event = "addTask"
+    @remove-task-event = "removeTask"
+    @update-task-event = "updateTask"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TodoList from './components/TodoList.vue'
+import list from './assets/list.json'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    TodoList
+  },
+  data(){
+    return {
+      list: []
+    }
+  },
+  created(){
+      this.list = list.response;
+  },
+  methods:{
+    addTask(newTask){
+      this.list.push(newTask);
+    },
+    removeTask(taskToDelete){
+      this.list = this.list.filter(task => task !== taskToDelete);
+    },
+    updateTask(taskToUpdate){
+      var index = this.list.findIndex(task => task.id == taskToUpdate.id);
+      this.list.splice(index, 1, taskToUpdate)
+    }
   }
 }
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    h1 {
+      font-family: 'Kristi', cursive;
+      color: white;
+      margin-bottom: 20px;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    ::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+    }
 }
 </style>
